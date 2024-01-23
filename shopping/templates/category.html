@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:150}}
+    {% else %}
+        Welcome to ABC Store where you can buy different items
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{ category.name}} - ABC Store
+    {% else %}
+        See our new collections-ABC store
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if category %}
+        <div>
+            <div class="row my_row_class">
+                <div class ="mx-auto">
+                <p><a href ="{% url 'shopapp:allProdCat' %}">Our Product Collection</a></p>
+            </div>
+            </div>
+
+        </div>
+    {% endif %}
+    <div>
+        {% if category %}
+            <img class="my_image" src ="{{category.image.url}}" alt ="{{category.name}}">
+    </div>
+        <br>
+    <div>
+        <h1 class="text:center my_title">{{category.name}}</h1>
+        <p class ="text-justify">{{category.description}}</p>
+    </div>
+    {% else %}
+    <div>
+        <img class ="my_image my_image_padding" src ="{% static 'img/banner.png' %}" alt ="our products" width ="1310px; height:50px">
+
+        <br>
+    <div>
+        <h1 class="text:center; my_title">Our Product Collections</h1>
+        <p class ="text-justify">  Ecommerce can take place within a company's smartphone app, on a social media platform, or in an online marketplace. You can participate in ecommerce anywhere you can establish an internet connection. Common examples includes online shopping, electronic payments, online auctions, and internet banking.</p>
+    </div>
+    {% endif %}
+
+
+        <div class="container">
+            <div class="row mx_auto">
+            {% for product in products.object_list  %}
+                 <div class ="my_bottom_margin col-9 col-sm-9 col-md-4 col-md-12 xol-lg-4">
+                    <div class ="container">
+                        <div class ="card-text-center" style="min-width:18rem;">
+                            <a href ="{{product.get_url}}"><img  src ="{{product.image.url}}" alt = "{{product.name}}"></a>
+                        <div>
+                            <h4>{{products.name}}</h4>
+                            <p>{{products.price}}</p>
+                        </div>
+                    </div>
+                </div>
+                {%  endfor %}
+            </div>
+            <div class ="mx-auto">
+                {% if products.paginator.num_pages > 1 %}
+
+                    <hr>
+                <div class ="text-center">
+                    {% for pg in products.paginator.page_range %}
+                        <a href ="?page={{pg}}" class ="btn-btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+                <br>
+            </div>
+
+    </div>
+
+
+{% endblock %}
